@@ -9,6 +9,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
+  // eslint-disable-next-line default-case
   switch (action.type) {
     case "LOGIN": {
       localStorage.setItem("isLoggedIn", JSON.stringify(action.payload.isLoggedIn))
@@ -27,4 +28,5 @@ export const reducer = (state, action) => {
         user: null
       };
     }
-
+  }
+}
