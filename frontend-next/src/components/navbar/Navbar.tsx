@@ -14,8 +14,8 @@ const Navbar = () => {
   
   return (
     <Box as="nav" position="fixed" h={12} w="full" boxShadow="md" bgColor="whiteAlpha.700" fontSize="14px" isolation="isolate" zIndex={1} backdropFilter="auto" backdropBlur="base" >
-      <GlobalContainer>
-        <Flex justifyContent="space-between" alignItems="center" >
+      <GlobalContainer h="full">
+        <Flex justifyContent="space-between" alignItems="center" h="full" >
           <Link href="/" >
             <Text color="gray.900" fontWeight={"semibold"}>BTC Transcripts Queue</Text>
           </Link>

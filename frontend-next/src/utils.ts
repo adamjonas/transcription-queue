@@ -8,3 +8,12 @@ export const dateFormat = (date: Date) => {
   const _date = new Date(date)
   return new Intl.DateTimeFormat(undefined, options).format(_date)
 }
+
+const wordsFormat = new Intl.NumberFormat('en-US', {
+  notation: "compact",
+  compactDisplay: "short"
+});
+
+export const getCount = (number: number) => {
+  return wordsFormat.format(number)
+}

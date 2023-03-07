@@ -1,4 +1,4 @@
-import { dateFormat } from '@/utils'
+import { dateFormat, getCount } from '@/utils'
 import { Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
 import React from 'react'
 import { Transcript } from '../../../types'
@@ -29,7 +29,7 @@ const tableStructure: TableStructure[] = [
   {name: "speakers", type:"text-short", modifier: (data) => "N/A"},
   {name: "category", type:"text-long", modifier: (data) => "N/LA"},
   {name: "tags", type:"tags", modifier: (data) => "N/A"},
-  {name: "word count", type:"text-short", modifier: (data) => "N/A"},
+  {name: "word count", type:"text-short", modifier: (data) => `${getCount(data.details.length) ?? "-"} words` },
   {name: "bounty rate", type:"text-short", modifier: (data) => "N/A"},
   {name: "", type:"action", modifier: (data) => "N/A"},
 ]
@@ -96,6 +96,14 @@ const TableRow = ({row, ts}: {row: Transcript, ts: TableStructure[]}) => {
       </Td>
     )
   } 
+  const ShortText = ({tableItem, row}: TableDataElement) => {
+    const text = defaultUndefined(tableItem.modifier, row)
+    return (
+      <Td>
+        <Text>{text}</Text>
+      </Td>
+    )
+  } 
   const TableAction = ({tableItem, row}: TableDataElement) => {
     return (
       <Td>
@@ -114,6 +122,9 @@ const TableRow = ({row, ts}: {row: Transcript, ts: TableStructure[]}) => {
             return <Td key={`table-data-${idx}`}>{dateData(tableItem.modifier(row) ?? "")}</Td>
 
           case "text-long":
+            return <LongText tableItem={tableItem} row={row} />
+            
+          case "text-short":
             return <LongText tableItem={tableItem} row={row} />
 
           case "action":
