@@ -39,7 +39,7 @@ const QueueTable: React.FC<Props> = ({data}) => {
     return null;
   }
   return (
-    <Box fontSize="sm" py={4}>
+    <Box fontSize="sm" py={4} isolation="isolate" >
       <Heading size="md" mb={6} >Transcription Queue</Heading>
       <Table boxShadow="lg" borderTop="2px solid" borderTopColor="orange.400">
         <Thead>

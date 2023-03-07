@@ -1,4 +1,5 @@
 import Footer from "@/components/footer/Footer"
+import GlobalContainer from "@/components/GlobalContainer"
 import Navbar from "@/components/navbar/Navbar"
 import { Container } from "@chakra-ui/react"
 import Head from "next/head"
@@ -15,9 +16,9 @@ const Layout = ({ children }: {children: React.ReactNode}) => {
         <link rel="icon" href="./cryptocurrency.png" />
       </Head>
       <Navbar />
-      <Container flexGrow={1} maxW="container.xl" paddingBlock={4} >
+      <GlobalContainer flexGrow={1} py={4} mt={12}>
         {children}
-      </Container>
+      </GlobalContainer>
       <Footer />
     </div>
   )
