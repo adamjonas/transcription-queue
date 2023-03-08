@@ -1,6 +1,6 @@
-import { Box, Divider, Flex, Spacer, Text } from '@chakra-ui/react'
-import React from 'react'
-import GlobalContainer from '../GlobalContainer'
+import { Box, Divider, Flex, Text } from "@chakra-ui/react";
+import React from "react";
+import GlobalContainer from "../GlobalContainer";
 
 const Footer = () => {
   return (
@@ -9,13 +9,13 @@ const Footer = () => {
         <Flex mb={5}>
           <Flex color="gray.100" gap={2} fontSize="12px">
             <Text>Copyright © {new Date().getFullYear()}</Text>
-            <Divider orientation='vertical' />
+            <Divider orientation="vertical" />
             <Text>All Rights Reserved.</Text>
           </Flex>
         </Flex>
       </GlobalContainer>
     </Box>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

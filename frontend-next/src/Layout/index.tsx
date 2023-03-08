@@ -1,12 +1,11 @@
-import Footer from "@/components/footer/Footer"
-import GlobalContainer from "@/components/GlobalContainer"
-import Navbar from "@/components/navbar/Navbar"
-import { Container } from "@chakra-ui/react"
-import Head from "next/head"
-import React from "react"
-import styles from "./layout.module.css"
+import Footer from "@/components/footer/Footer";
+import GlobalContainer from "@/components/GlobalContainer";
+import Navbar from "@/components/navbar/Navbar";
+import Head from "next/head";
+import React from "react";
+import styles from "./layout.module.css";
 
-const Layout = ({ children }: {children: React.ReactNode}) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={styles.app_container}>
       <Head>
@@ -21,7 +20,7 @@ const Layout = ({ children }: {children: React.ReactNode}) => {
       </GlobalContainer>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
