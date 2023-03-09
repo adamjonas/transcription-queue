@@ -1,16 +1,19 @@
 module.exports = (sequelize, Sequelize) => {
   const Transcript = sequelize.define("transcript", {
-    title: {
-      type: Sequelize.STRING
+    content: {
+      type: Sequelize.JSON
     },
-    details: {
-      type: Sequelize.TEXT
+    originalContent: {
+      type: Sequelize.JSON
+      //FIXME: Don't allow null values for this field
     },
-    reviewedAt: {
-      type: Sequelize.DATE,
+    status: {
+      type: Sequelize.ENUM('queued','not queued','requeued'),
+      allowNull: false,
+      defaultValue: 'not queued'
     },
-    claimedAt: {
-      type: Sequelize.DATE,
+    archivedAt: {
+      type: Sequelize.DATE
     }
   });
 
