@@ -40,10 +40,10 @@ type TableDataElement = {
 };
 
 const tableStructure: TableStructure[] = [
-  { name: "date", type: "date", modifier: (data) => data?.createdAt },
-  { name: "title", type: "text-long", modifier: (data) => data.title },
+  { name: "date", type: "date", modifier: (data) => data?.content.date },
+  { name: "title", type: "text-long", modifier: (data) => data?.content.title },
   { name: "speakers", type: "text-short", modifier: (_data) => "N/A" },
-  { name: "category", type: "text-long", modifier: (data) => "N/LA" },
+  { name: "category", type: "text-long", modifier: (data) => "N/A" },
   { name: "tags", type: "tags", modifier: (data) => "N/A" },
   {
     name: "word count",
