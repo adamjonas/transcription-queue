@@ -35,7 +35,7 @@ services:
   frontend:
     container_name: client
     build:
-      context: ./frontend
+      context: ./frontend-next
       dockerfile: Dockerfile
     volumes:
       - ./src:/app/src
