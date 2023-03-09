@@ -1,15 +1,22 @@
+# Use an official Node.js runtime as a parent image
 FROM node:16
 
+# Set the working directory to /app
 WORKDIR /usr/src/app/my-app
 
-COPY package*.json ./
+# Copy the package.json and yarn.lock files into the container
+COPY package.json yarn.lock ./
 
-RUN npm install --unsafe-perm=true --allow-root --legacy-peer-deps
+# Install dependencies
+RUN yarn install
 
+# Copy the rest of the application code into the container
 COPY . .
 
 RUN chmod 777 node_modules
 
-EXPOSE 3000/tcp
+# Expose the port that the app will run on
+EXPOSE 3000
 
+# Start the development server
 CMD ["yarn", "dev"]
