@@ -4,6 +4,32 @@ module.exports = app => {
   var router = require("express").Router();
 
   // Create a new User
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Create a JSONPlaceholder user.
+ *     responses:
+ *       201:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: string
+ *                       description: The user's github username.
+ *                       example: glozow
+ *                     permissions:
+ *                       type: string
+ *                       description: The user's permissions.
+ *                       enum: [admin, reviewer]
+*/
   router.post("/", users.create);
 
   // Retrieve all users
@@ -29,15 +55,81 @@ module.exports = app => {
  *                       id:
  *                         type: integer
  *                         description: The user ID.
- *                         example: 0
- *                       name:
+ *                         example: 1
+ *                       githubUsername:
  *                         type: string
- *                         description: The user's name.
- *                         example: Leanne Graham
+ *                         description: The user's Github username.
+ *                         example: ryanofsky
+ *                       authToken:
+ *                         type: string
+ *                         description: The user's authentication token.
+ *                         example: Thsdfk3j3kflfjdkfjfj
+ *                       permissions:
+ *                         type: string
+ *                         description: The user's permissions.
+ *                         examples: admin, reviewer
+ *                       archivedAt:
+ *                         type: datetime
+ *                         description: Date when a user is marked as inactive.
+ *                         example: 2023-03-08T13:42:08.699Z
+ *                       createdAt:
+ *                         type: datetime
+ *                         description: Date when a user is created
+ *                         example: 2023-03-08T13:42:08.699Z
+ *                       updatedAt:
+ *                         type: datetime
+ *                         description: Date when a user record is updated.
+ *                         example: 2023-03-08T13:42:08.699Z
  */
   router.get("/", users.findAll);
 
   // Retrieve a single User with id
+   /**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Retrieve a single JSONPlaceholder user.
+ *     description: Retrieve a single JSONPlaceholder user. Can be used to populate a user profile when prototyping or testing an API.
+ *     responses:
+ *       200:
+ *         description: A single user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       description: The user ID.
+ *                       example: 1
+ *                     githubUsername:
+ *                       type: string
+ *                       description: The user's Github username.
+ *                       example: ryanofsky
+ *                     authToken:
+ *                       type: string
+ *                       description: The user's authentication token.
+ *                       example: Thsdfk3j3kflfjdkfjfj
+ *                     permissions:
+ *                       type: string
+ *                       description: The user's permissions.
+ *                       examples: admin, reviewer
+ *                     archivedAt:
+ *                       type: datetime
+ *                       description: Date when a user is marked as inactive.
+ *                       example: 2023-03-08T13:42:08.699Z
+ *                     createdAt:
+ *                       type: datetime
+ *                       description: Date when a user is created
+ *                       example: 2023-03-08T13:42:08.699Z
+ *                     updatedAt:
+ *                       type: datetime
+ *                       description: Date when a user record is updated.
+ *                       example: 2023-03-08T13:42:08.699Z
+*/
   router.get("/:id", users.findOne);
 
   // Update a user with id
