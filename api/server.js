@@ -45,19 +45,10 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Bitcoin Transcripts Express API with Swagger",
+      title: "Bitcoin Transcripts API documentation",
       version: "1.0.0",
       description:
         "This is documentation for the Transcription Queue project API",
-      license: {
-        name: "MIT",
-        url: "https://spdx.org/licenses/MIT.html",
-      },
-      contact: {
-        name: "Transcription Queue",
-        url: "https://future-domain.com",
-        email: "info@future-domain.com",
-      },
     },
     servers: [
       {
@@ -70,7 +61,7 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 app.use(
-  "/docs",
+  "/api/docs",
   swaggerUi.serve,
   swaggerUi.setup(specs,{explorer: true})
 );

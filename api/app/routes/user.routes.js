@@ -3,11 +3,27 @@ module.exports = app => {
 
   var router = require("express").Router();
 
+  /**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: The user's github username.
+ *           example: glozow
+ *         permissions:
+ *           type: string
+ *           description: The user's permissions.
+ *           enum: [admin, reviewer]
+ */
   // Create a new User
 
 /**
  * @swagger
- * /users:
+ * /api/users:
  *   post:
  *     summary: Create a JSONPlaceholder user.
  *     responses:
@@ -35,7 +51,7 @@ module.exports = app => {
   // Retrieve all users
   /**
  * @swagger
- * /users:
+ * /api/users:
  *   get:
  *     summary: Retrieve a list of JSONPlaceholder users.
  *     description: Retrieve a list of users from JSONPlaceholder. Can be used to populate a list of fake users when prototyping or testing an API.
@@ -67,7 +83,7 @@ module.exports = app => {
  *                       permissions:
  *                         type: string
  *                         description: The user's permissions.
- *                         examples: admin, reviewer
+ *                         enum: [admin, reviewer]
  *                       archivedAt:
  *                         type: datetime
  *                         description: Date when a user is marked as inactive.
@@ -86,10 +102,17 @@ module.exports = app => {
   // Retrieve a single User with id
    /**
  * @swagger
- * /users/{id}:
+ * /api/users/{id}:
  *   get:
  *     summary: Retrieve a single JSONPlaceholder user.
  *     description: Retrieve a single JSONPlaceholder user. Can be used to populate a user profile when prototyping or testing an API.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the user to retrieve.
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: A single user.
@@ -116,7 +139,7 @@ module.exports = app => {
  *                     permissions:
  *                       type: string
  *                       description: The user's permissions.
- *                       examples: admin, reviewer
+ *                       enum: [admin, reviewer]
  *                     archivedAt:
  *                       type: datetime
  *                       description: Date when a user is marked as inactive.
