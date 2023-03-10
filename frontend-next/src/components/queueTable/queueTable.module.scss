@@ -1,0 +1,14 @@
+.list_circle {
+  position: relative;
+}
+.list_circle::before {
+  position: absolute;
+  content: '';
+  height: 6px;
+  width: 6px;
+  border-radius: 100%;
+  background-color: var(--chakra-colors-orange-400);
+  left: 0;
+  top: 50%;
+  transform: translate(-10px, -50%);
+}

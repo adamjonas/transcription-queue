@@ -14,6 +14,7 @@ const wordsFormat = new Intl.NumberFormat("en-US", {
   compactDisplay: "short",
 });
 
-export const getCount = (number: number) => {
-  return wordsFormat.format(number);
+export const getCount = (item: number | string) => {
+  const formattedItem = typeof item === "string" ? item.length : item;
+  return wordsFormat.format(formattedItem);
 };

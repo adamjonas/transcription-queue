@@ -10,7 +10,9 @@ const useTranscripts = () => {
       .catch((err) => err);
   };
 
-  const transcripts = useQuery("trancripts", getAllTranscripts);
+  const transcripts = useQuery("trancripts", getAllTranscripts, {
+    refetchOnWindowFocus: false,
+  });
 
   return { transcripts };
 };
