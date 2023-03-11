@@ -17,7 +17,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import { Transcript } from "../../../types";
 import TablePopover from "../TablePopover";
 import { SlPeople } from "react-icons/sl";
@@ -91,15 +91,23 @@ const QueueTable: React.FC<Props> = ({ data, isLoading, isError, refetch }) => {
   //   return null;
   // }
   const LoadingSkeleton = () => {
-    return (
-      <Tr>
-        {tableStructure.map((item, _idx) => (
-          <Td key={_idx}>
-            <SkeletonText />
-          </Td>
-        ))}
-      </Tr>
-    );
+    const getSkeleton = useMemo(() => {
+      const skeletonArr = [];
+      for (let index = 0; index < 3; index++) {
+        skeletonArr.push(
+          <Tr key={index}>
+            {tableStructure.map((item, _idx) => (
+              <Td key={_idx}>
+                <Skeleton w="100%" h={4} />
+              </Td>
+            ))}
+          </Tr>
+        );
+      }
+      return skeletonArr;
+    }, []);
+
+    return <>{getSkeleton}</>;
   };
   return (
     <Box fontSize="sm" py={4} isolation="isolate">
@@ -135,20 +143,24 @@ const QueueTable: React.FC<Props> = ({ data, isLoading, isError, refetch }) => {
           <TableHeader tableStructure={tableStructure} />
         </Thead>
         <Tbody fontWeight="medium">
-          {data?.length ? (
-            data.map((dataRow, idx) => (
-              <TableRow key={idx} row={dataRow} ts={tableStructure} />
-            ))
-          ) : isLoading ? (
+          {isLoading ? (
             <LoadingSkeleton />
+          ) : data?.length ? (
+            data.map((dataRow, idx) => (
+              <TableRow
+                key={`data-row-${dataRow.id}`}
+                row={dataRow}
+                ts={tableStructure}
+              />
+            ))
           ) : (
-            <Tr position="relative">
+            <Tr position="relative" h={10}>
               <Td
                 position="absolute"
                 w="full"
-                mx="auto"
                 top="50%"
                 color="red.400"
+                textAlign="center"
               >
                 Something went wrong
               </Td>
@@ -283,19 +295,33 @@ const TableRow = ({ row, ts }: { row: Transcript; ts: TableStructure[] }) => {
       {ts.map((tableItem, idx) => {
         switch (tableItem.type) {
           case "date":
-            return <DateText tableItem={tableItem} row={row} />;
+            return (
+              <DateText key={tableItem.name} tableItem={tableItem} row={row} />
+            );
 
           case "text-long":
-            return <LongText tableItem={tableItem} row={row} />;
+            return (
+              <LongText key={tableItem.name} tableItem={tableItem} row={row} />
+            );
 
           case "text-short":
-            return <ShortText tableItem={tableItem} row={row} />;
+            return (
+              <ShortText key={tableItem.name} tableItem={tableItem} row={row} />
+            );
 
           case "tags":
-            return <Tags tableItem={tableItem} row={row} />;
+            return (
+              <Tags key={tableItem.name} tableItem={tableItem} row={row} />
+            );
 
           case "action":
-            return <TableAction tableItem={tableItem} row={row} />;
+            return (
+              <TableAction
+                key={tableItem.name}
+                tableItem={tableItem}
+                row={row}
+              />
+            );
 
           default:
             return <Td key={`table-data-${idx}`}>N/A</Td>;
