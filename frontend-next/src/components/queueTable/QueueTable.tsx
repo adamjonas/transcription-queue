@@ -247,28 +247,15 @@ const TableRow = ({ row, ts }: { row: Transcript; ts: TableStructure[] }) => {
           {Array.isArray(_parsed) && _parsed.length > 1 ? (
             <TablePopover
               trigger={
-                <IconButton
-                  minW="auto"
-                  h="auto"
-                  p="2px"
-                  colorScheme="orange"
-                  variant="ghost"
-                  aria-label="speaker"
-                  icon={<HiOutlineArrowSmDown />}
-                />
+                <button className={styles.more_button}>
+                  +{_parsed.length}
+                </button>
               }
               title={tableItem.name}
             >
               <Flex flexDir="column">
                 {_parsed.map((item, idx) => (
-                  <Text
-                    className={styles.list_circle}
-                    textTransform="capitalize"
-                    fontSize="12px"
-                    fontWeight="bold"
-                    key={idx}
-                    marginLeft="10px"
-                  >
+                  <Text textTransform="capitalize" fontSize="12px" key={idx}>
                     {item}
                   </Text>
                 ))}
