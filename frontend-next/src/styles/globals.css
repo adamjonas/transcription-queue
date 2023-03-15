@@ -23,3 +23,8 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* styling for text-editor library */
+.w-md-editor {
+  height: 100% !important;
+}

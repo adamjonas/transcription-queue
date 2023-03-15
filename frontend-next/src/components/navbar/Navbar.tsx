@@ -33,8 +33,6 @@ const Navbar = () => {
       fontSize="14px"
       isolation="isolate"
       zIndex={1}
-      backdropFilter="auto"
-      backdropBlur="base"
     >
       <GlobalContainer h="full">
         <Flex justifyContent="space-between" alignItems="center" h="full">
@@ -44,7 +42,7 @@ const Navbar = () => {
             </Text>
           </Link>
           {!userSession ? (
-            <Button variant={"link"} onClick={() => signIn()}>
+            <Button variant={"link"} onClick={() => signIn("github")}>
               <Flex alignItems="center" gap={2}>
                 <Text>Sign In</Text>
                 <Icon as={FaGithub} />
