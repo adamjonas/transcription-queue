@@ -15,14 +15,14 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    networks:
+      - app-network
   
   api:
     build:
       context: ./api
     volumes:
       - ./api:/src
-    ports:
-      - "8080:8080"
     depends_on:
       - db
     environment:
@@ -31,6 +31,8 @@ services:
       DB_USER: postgres
       DB_PASSWORD: 123
       DB_NAME: testdb
+    networks:
+      - app-network
 
   frontend:
     container_name: client
@@ -43,7 +45,44 @@ services:
       - "3000:3000"
     depends_on:
       - api
+    networks:
+      - app-network
+
+  webserver:
+    image: nginx:mainline-alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email bob@chaincode.com --agree-tos --no-eff-email --staging -d ec2-13-231-62-63.ap-northeast-1.compute.amazonaws.com -d www.ec2-13-231-62-63.ap-northeast-1.compute.amazonaws.com
 
 volumes:
   db:
     driver: local
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
