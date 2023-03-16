@@ -25,6 +25,13 @@ a {
 }
 
 /* styling for text-editor library */
-.w-md-editor {
-  height: 100% !important;
+
+#simplemde-container-controller > div{
+  height: 100%;
+}
+
+.EasyMDEContainer {
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
 }

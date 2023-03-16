@@ -1,10 +1,14 @@
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-import dynamic from "next/dynamic";
 import { Transcript } from "../../../types";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+import "easymde/dist/easymde.min.css";
+import { useCallback } from "react";
+
+import dynamic from "next/dynamic";
+
+const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 const EditTranscript = ({
   data,
@@ -15,6 +19,11 @@ const EditTranscript = ({
   mdData: string;
   update: (x: any) => void;
 }) => {
+  
+  const onChange = useCallback((value: string) => {
+    update(value);
+  }, []);
+
   return (
     <Box w="full" h="70vh">
       <Flex alignItems="center" justifyContent="space-between" my={2}>
@@ -27,9 +36,12 @@ const EditTranscript = ({
           Restore Original
         </Button>
       </Flex>
-      <div data-color-mode="light" style={{ height: "100%", overflow: "auto" }}>
+      <Box h="full" id="simplemde-container-controller">
+        <SimpleMdeReact value={mdData} onChange={onChange} />
+      </Box>
+      {/* <div data-color-mode="light" style={{ height: "100%", overflow: "auto" }}>
         <MDEditor value={mdData} onChange={update} />
-      </div>
+      </div> */}
     </Box>
   );
 };

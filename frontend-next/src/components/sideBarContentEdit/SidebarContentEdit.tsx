@@ -1,14 +1,47 @@
-import { getTimeLeft } from "@/utils";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { dateFormatGeneral, getTimeLeftText } from "@/utils";
+import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import Link from "next/link";
+import { useState } from "react";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { Transcript } from "../../../types";
+import SelectField from "./SelectField";
+import TextField from "./TextField";
 
-const SidebarContentEdit = ({ data }: { data: Transcript }) => {
+export type RenderProps = {
+  (editedContent: {
+    editedTitle: string;
+    editedSpeakers: string[];
+    editedCategories: string[];
+    editedDate: string;
+  }): React.ReactNode;
+};
+
+const SidebarContentEdit = ({
+  data,
+  children,
+}: {
+  data: Transcript;
+  children?: RenderProps;
+}) => {
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedSpeakers, setEditedSpeakers] = useState<string[]>([]);
+  const [editedCategories, setEditedCategories] = useState<string[]>([]);
+
+  const dateStringFormat = dateFormatGeneral(data?.createdAt, true) as string;
+  const [editedDate, setEditedDate] = useState<string>(dateStringFormat || "");
+
+  const updateTitle = (newTitle: string) => {
+    setEditedTitle(newTitle);
+  };
+  const updateSpeaker = (speakers: string[]) => {
+    setEditedSpeakers(speakers);
+  };
+  const updateCategories = (categories: string[]) => {
+    setEditedCategories(categories);
+  };
   return (
     <Box
       w="full"
-      h="500px"
       flex="1 1 30%"
       top={14}
       position="sticky"
@@ -17,6 +50,7 @@ const SidebarContentEdit = ({ data }: { data: Transcript }) => {
       borderRadius="lg"
       border="2px solid"
       borderColor="gray.200"
+      fontSize="14px"
     >
       <Flex direction="column" gap={6}>
         <Box
@@ -31,10 +65,12 @@ const SidebarContentEdit = ({ data }: { data: Transcript }) => {
           <span>
             <MdOutlineAccessTimeFilled />
           </span>
-          <span>{getTimeLeft(data.createdAt)} hours left</span>
+          <span>{getTimeLeftText(data.createdAt)}</span>
         </Box>
         <Box>
-          <Text fontWeight={600} mb={2}>Original Media</Text>
+          <Text fontWeight={600} mb={2}>
+            Original Media
+          </Text>
           <Link href={data.originalContent?.media || ""}>
             <Box
               display="inline-block"
@@ -50,6 +86,59 @@ const SidebarContentEdit = ({ data }: { data: Transcript }) => {
             </Box>
           </Link>
         </Box>
+        <Box>
+          <Text fontWeight={600} mb={2}>
+            Title
+          </Text>
+          <TextField
+            data={data.originalContent.title}
+            editedData={editedTitle}
+            updateData={updateTitle}
+          />
+        </Box>
+        <Box>
+          <Text fontWeight={600} mb={2}>
+            Speakers
+          </Text>
+          <SelectField
+            name="speakers"
+            data={data.originalContent.speakers ?? []}
+            editedData={editedSpeakers}
+            updateData={updateSpeaker}
+          />
+        </Box>
+        <Box>
+          <Text display="inline-block" fontWeight={600} mb={2}>
+            Date
+          </Text>
+          <Text ml={3} display="inline-block" color="gray.400">
+            YYY-MM-DD format
+          </Text>
+          <Input
+            fontSize="12px"
+            type="date"
+            value={editedDate}
+            onChange={(e) => setEditedDate(e.target.value)}
+          />
+        </Box>
+        <Box>
+          <Text fontWeight={600} mb={2}>
+            Categories
+          </Text>
+          <SelectField
+            name="categories"
+            data={data.originalContent.categories ?? []}
+            editedData={editedCategories}
+            updateData={updateCategories}
+          />
+        </Box>
+        {children &&
+          children({
+            editedTitle,
+            editedSpeakers,
+            editedCategories,
+            editedDate,
+          })}
       </Flex>
     </Box>
   );
