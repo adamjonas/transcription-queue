@@ -8,6 +8,7 @@ import SelectField from "./SelectField";
 import TextField from "./TextField";
 
 export type RenderProps = {
+  // eslint-disable-next-line no-unused-vars
   (editedContent: {
     editedTitle: string;
     editedSpeakers: string[];

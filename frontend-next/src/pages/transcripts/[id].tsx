@@ -1,4 +1,5 @@
-import { Button, Flex, FormControl } from "@chakra-ui/react";
+/* eslint-disable no-unused-vars */
+import { Button, Flex } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
@@ -11,7 +12,7 @@ type Props = {
 };
 
 const TranscriptPage: NextPage<Props> = ({ data }) => {
-  const { data: userSession, status } = useSession();
+  const { status } = useSession();
   const [editedData, setEditedData] = useState(data.originalContent.body || "");
   // if (status === "authenticated")
 
@@ -60,7 +61,7 @@ const TranscriptPage: NextPage<Props> = ({ data }) => {
 
 export const getServerSideProps: GetServerSideProps<{
   data: Transcript;
-}> = async ({ params, res }) => {
+}> = async ({ params }) => {
   const id = params?.id;
 
   const fetchedData = await fetch(`${process.env.BASE_URL}/transcripts/${id}`);

@@ -17,12 +17,15 @@ const EditTranscript = ({
 }: {
   data: Transcript;
   mdData: string;
+  // eslint-disable-next-line no-unused-vars
   update: (x: any) => void;
 }) => {
-  
-  const onChange = useCallback((value: string) => {
-    update(value);
-  }, []);
+  const onChange = useCallback(
+    (value: string) => {
+      update(value);
+    },
+    [update]
+  );
 
   return (
     <Box w="full" h="70vh">
