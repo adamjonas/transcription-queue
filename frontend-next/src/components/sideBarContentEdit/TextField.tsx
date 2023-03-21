@@ -22,51 +22,64 @@ const TextField = ({ data, editedData, updateData }: any) => {
   };
 
   return (
-    <FormControl>
-      <Flex gap={2}>
-        {isEdit ? (
-          <>
+    <>
+      {isEdit ? (
+        <FormControl>
+          <Flex gap={2}>
             <Textarea
               p={1}
-              fontSize="12px"
+              // rows={1}
+              fontSize="inherit"
               resize="none"
               value={state}
               onChange={handleInputChange}
             ></Textarea>
-            <Flex direction="column" justifyContent="space-around" gap={2}>
+            <Flex direction="column" justifyContent="space-evenly">
               <IconButton
                 fontSize="20px"
+                p={1}
                 size="sm"
+                minW="auto"
+                h="auto"
                 colorScheme="green"
+                variant="outline"
                 onClick={handleUpdateEdit}
                 aria-label="edit title"
                 icon={<BiCheck />}
               />
               <IconButton
                 fontSize="20px"
+                p={1}
                 size="sm"
+                minW="auto"
+                h="auto"
                 colorScheme="red"
+                variant="outline"
                 onClick={() => setIsEdit(false)}
                 aria-label="edit title"
                 icon={<BiX />}
               />
             </Flex>
-          </>
-        ) : (
-          <>
-            <Text>{editedData ? editedData : data}</Text>
-            {/* <Button onClick={() => setIsEdit(true)}><BiPencil /></Button> */}
-            <IconButton
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEdit(true)}
-              aria-label="edit title"
-              icon={<BiPencil />}
-            />
-          </>
-        )}
-      </Flex>
-    </FormControl>
+          </Flex>
+        </FormControl>
+      ) : (
+        <Flex justifyContent="space-between" gap={1} alignItems="center">
+          <Text>{editedData ? editedData : data}</Text>
+          {/* <Button onClick={() => setIsEdit(true)}><BiPencil /></Button> */}
+          <IconButton
+            fontSize="16px"
+            p="6px"
+            size="sm"
+            minW="auto"
+            h="auto"
+            variant="ghost"
+            onClick={() => setIsEdit(true)}
+            aria-label="edit title"
+            icon={<BiPencil />}
+          />
+        </Flex>
+      )}
+    </>
   );
 };
 

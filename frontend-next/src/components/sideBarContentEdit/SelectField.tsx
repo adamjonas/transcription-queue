@@ -127,7 +127,8 @@ const SelectBox = ({
           <Flex gap={1} alignItems="center">
             <Input
               p={1}
-              fontSize="12px"
+              h="auto"
+              fontSize="inherit"
               value={state}
               onChange={handleInputChange}
               ref={inputRef}
@@ -140,7 +141,7 @@ const SelectBox = ({
                 colorScheme="green"
                 variant="outline"
                 onClick={handleIndividualEdit}
-                aria-label="edit title"
+                aria-label="confirm speaker editing"
                 icon={<BiCheck />}
               />
               <IconButton
@@ -148,8 +149,9 @@ const SelectBox = ({
                 size="sm"
                 fontSize="16px"
                 colorScheme="red"
+                variant="outline"
                 onClick={handleIndividualEdit}
-                aria-label="edit title"
+                aria-label="reject speaker editing"
                 icon={<BiX />}
               />
             </Flex>
@@ -159,10 +161,14 @@ const SelectBox = ({
         <Flex justifyContent="space-between" gap={1} alignItems="center">
           <Text fontSize="14px">{speaker}</Text>
           <IconButton
+            fontSize="16px"
+            p="6px"
+            size="sm"
+            minW="auto"
+            h="auto"
             variant="ghost"
-            size="xs"
             onClick={() => setIsEdit(true)}
-            aria-label="edit title"
+            aria-label="edit speaker"
             icon={<BiPencil />}
           />
         </Flex>

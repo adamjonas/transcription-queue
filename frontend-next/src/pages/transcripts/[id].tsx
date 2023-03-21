@@ -32,7 +32,7 @@ const TranscriptPage: NextPage<Props> = ({ data }) => {
   };
 
   return (
-    <Flex gap={6} w="full">
+    <Flex gap={6} w="full" flexDir={{ base: "column", md: "row" }}>
       <SidebarContentEdit data={data}>
         {(editedContent) => (
           <Flex gap={2}>
