@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { Transcript } from "../../../types";
+import CustomDatePicker from "./CustomDatePicker";
 import SelectField from "./SelectField";
 import TextField from "./TextField";
 
@@ -113,14 +114,17 @@ const SidebarContentEdit = ({
             Date
           </Text>
           <Text ml={3} display="inline-block" color="gray.400">
-            YYY-MM-DD format
+            YYYY-MM-DD format
           </Text>
-          <Input
+
+          <CustomDatePicker date={editedDate} onChange={setEditedDate} />
+
+          {/* <Input
             fontSize="12px"
             type="date"
             value={editedDate}
             onChange={(e) => setEditedDate(e.target.value)}
-          />
+          /> */}
         </Box>
         <Box>
           <Text fontWeight={600} mb={2}>
