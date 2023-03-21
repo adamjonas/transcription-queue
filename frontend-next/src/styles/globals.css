@@ -27,11 +27,5 @@ a {
 /* styling for text-editor library */
 
 #simplemde-container-controller > div{
-  height: 100%;
-}
-
-.EasyMDEContainer {
-  height: 100%;
-  display: flex !important;
-  flex-direction: column;
+  height: 70vh;
 }

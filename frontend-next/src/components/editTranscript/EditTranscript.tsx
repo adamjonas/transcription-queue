@@ -1,10 +1,11 @@
 import { Transcript } from "../../../types";
+import dynamic from "next/dynamic";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 
-import "easymde/dist/easymde.min.css";
-import { useCallback } from "react";
+import MdEditor from "md-editor-rt";
+import "md-editor-rt/lib/style.css";
 
-import dynamic from "next/dynamic";
+import "easymde/dist/easymde.min.css";
 
 const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -20,15 +21,8 @@ const EditTranscript = ({
   // eslint-disable-next-line no-unused-vars
   update: (x: any) => void;
 }) => {
-  const onChange = useCallback(
-    (value: string) => {
-      update(value);
-    },
-    [update]
-  );
-
   return (
-    <Box w="full" h="70vh">
+    <Box w="full">
       <Flex alignItems="center" justifyContent="space-between" my={2}>
         <Text>Transcription Text</Text>
         <Button
@@ -40,11 +34,9 @@ const EditTranscript = ({
         </Button>
       </Flex>
       <Box h="full" id="simplemde-container-controller">
-        <SimpleMdeReact value={mdData} onChange={onChange} />
+        {/* <SimpleMdeReact value={mdData} onChange={onChange} /> */}
+        <MdEditor modelValue={mdData} onChange={update} language="en-US" />
       </Box>
-      {/* <div data-color-mode="light" style={{ height: "100%", overflow: "auto" }}>
-        <MDEditor value={mdData} onChange={update} />
-      </div> */}
     </Box>
   );
 };
