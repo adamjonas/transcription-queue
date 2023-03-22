@@ -10,6 +10,7 @@ services:
       POSTGRES_PASSWORD: '123'
     ports:
       - '5433:5432'
+    restart: unless-stopped
     expose:
       - "5433"
     volumes:
@@ -26,6 +27,7 @@ services:
       - ./api:/src
     depends_on:
       - db
+    restart: unless-stopped
     environment:
       DB_HOST: db
       DB_PORT: 5433
@@ -42,6 +44,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./src:/app/src
+    restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
