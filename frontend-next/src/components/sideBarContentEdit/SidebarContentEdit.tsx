@@ -93,7 +93,7 @@ const SidebarContentEdit = ({
             Title
           </Text>
           <TextField
-            data={data.originalContent.title}
+            data={data.originalContent?.title ?? ""}
             editedData={editedTitle}
             updateData={updateTitle}
           />
