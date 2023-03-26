@@ -1,4 +1,5 @@
 import { Transcript } from "../../../types";
+
 // import dynamic from "next/dynamic";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 
@@ -6,6 +7,7 @@ import MdEditor from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 
 import "easymde/dist/easymde.min.css";
+
 import { useEffect, useRef } from "react";
 
 // const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), {
@@ -22,6 +24,7 @@ const EditTranscript = ({
   // eslint-disable-next-line no-unused-vars
   update: (x: any) => void;
 }) => {
+
   const hasUpdatedEditorData = useRef<Boolean>(false);
   useEffect(() => {
     if (
@@ -44,6 +47,7 @@ const EditTranscript = ({
       display="flex"
       flexDir="column"
     >
+
       <Flex alignItems="center" justifyContent="space-between" my={2}>
         <Text>Transcription Text</Text>
         <Button
