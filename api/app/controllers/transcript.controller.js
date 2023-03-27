@@ -1,23 +1,47 @@
 const db = require("../models");
 const Transcript = db.transcripts;
 const Op = db.Sequelize.Op;
+const crypto = require('crypto');
 
 // Create and Save a new Transcript
 exports.create = (req, res) => {
   // Validate request
   if (!req.body.content) {
-    //FIXME: Include original content check in if condition
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content cannot be empty!"
+    });
+    return;
+  }
+  
+  else if (!req.body.originalContent) {
+    res.status(400).send({
+      message: "Original Content cannot be empty!"
     });
     return;
   }
 
+  else if (!req.body.authToken) {
+    res.status(400).send({
+      message: "Auth token cannot be empty!"
+    });
+    return;
+  }
+
+
+  const generateHash = () => {
+
+    const oc = req.body.originalContent
+    const hashParams = oc.title + oc.media + oc.date
+    const transcriptHash = crypto.createHash('sha256').update(hashParams).digest('base64');
+
+    return transcriptHash;
+  }
   // Create a Transcript
   const transcript = {
-    // We have to add title because for some reason having just content makes an update to an existing record insted of inserting a new one
     originalContent: req.body.originalContent,
-    content: req.body.content
+    content:req.body.originalContent,
+    authToken: req.body.authToken
+    transcriptHash: generateHash();
   };
 
   // Save Transcript in the database
@@ -67,6 +91,30 @@ exports.findOne = (req, res) => {
 
 // Update a Transcript by the id in the request
 exports.update = (req, res) => {
+  const id = req.params.id;
+
+  Transcript.update(req.body, {
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Transcript was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Transcript with id=${id}. Maybe Transcript was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Transcript with id=" + id
+      });
+    });
+};
+
+exports.addTranscriptHash = (req, res) => {
   const id = req.params.id;
 
   Transcript.update(req.body, {
