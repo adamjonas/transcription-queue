@@ -12,11 +12,6 @@ module.exports = (sequelize, Sequelize) => {
       unique: true,
       allowNull: false
     },
-    authToken: { // prevent ddos attacks to the api
-      type: Sequelize.STRING,
-      unique: true,
-      allowNull: false
-    },
     status: {
       type: Sequelize.ENUM('queued','not queued','requeued'),
       allowNull: false,

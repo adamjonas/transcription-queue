@@ -128,27 +128,4 @@ exports.update = (req, res) => {
     });
 };
 
-exports.addTranscriptHash = (req, res) => {
-  const id = req.params.id;
-
-  Transcript.update(req.body, {
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Transcript was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Transcript with id=${id}. Maybe Transcript was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Transcript with id=" + id
-      });
-    });
-};
 //FIXME: Add an archive route in order to cater for archived transcripts and filling the archivedAt field in the model. 
