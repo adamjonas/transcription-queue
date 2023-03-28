@@ -1,8 +1,8 @@
 import axios from "@/api/axios";
-import NextAuth, { Session } from "next-auth";
+import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GithubProvider from "next-auth/providers/github";
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
@@ -10,7 +10,7 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET ?? "",
       authorization: {
         url: "https://github.com/login/oauth/authorize",
-        params: { scope: "read:user user:email repo" },
+        params: { scope: "read:user user:email public_repo" },
       },
     }),
     // ...add more providers here
