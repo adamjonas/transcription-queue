@@ -9,6 +9,12 @@ declare module "next-auth" {
     permissions: string;
     userId?: number;
   }
+
+  interface GhExtendedProfile extends Profile {
+    login: string;
+    avatar_url: string;
+    [key]?: string;
+  }
 }
 
 /** Example on how to extend the built-in types for JWT */

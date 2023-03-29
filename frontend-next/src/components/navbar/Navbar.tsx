@@ -18,9 +18,6 @@ import GlobalContainer from "../GlobalContainer";
 
 const Navbar = () => {
   const { data: userSession } = useSession();
-  // useEffect(() => {
-  //   console.log({userSession})
-  // }, [userSession])
 
   return (
     <Box

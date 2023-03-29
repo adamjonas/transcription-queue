@@ -1,7 +1,9 @@
 import axios from "@/api/axios";
-import NextAuth, { NextAuthOptions, Session } from "next-auth";
+import { createNewUser } from "@/api/lib";
+import NextAuth, { GhExtendedProfile, NextAuthOptions, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GithubProvider from "next-auth/providers/github";
+
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
@@ -16,6 +18,28 @@ export const authOptions: NextAuthOptions = {
     // ...add more providers here
   ],
   callbacks: {
+    // async signIn({ user, account, profile }) {
+    //   const res = await fetch("/api/auth/github", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       access_token: account?.accessToken,
+    //       user: {
+    //         name: user.name,
+    //         email: user.email,
+    //         image: user.image,
+    //       },
+    //     }),
+    //   });
+    //   const data = await res.json();
+    //   if (data.error) {
+    //     throw new Error(data.error);
+    //   }
+    //   return true;
+    // },
+
     async session({
       session,
       token,
@@ -24,19 +48,49 @@ export const authOptions: NextAuthOptions = {
       token: any;
     }): Promise<Session> {
       // Send userId and permission properties to the client
-      session.userId = token.id;
+      const defaultSessionUser = session.user;
+      session.user = {
+        ...token.user,
+        ...defaultSessionUser,
+      };
       session.permissions = token.permissions;
       return session;
     },
-    async jwt({ token }: { token: JWT }) {
+    async jwt({ isNewUser, token, ...response }) {
+      const profile = response.profile as GhExtendedProfile | undefined;
+
+      const createAndSetNewUser = async (username: string, permissions?: string) => {
+        const res = await createNewUser({ username, permissions });
+        console.log("create and set", res.data)
+        if (res.data) {
+          token.user = res.data;
+        } else {
+          throw new Error("Unable to create user");
+        }
+      }
+
+      // if (!profile?.login) {
+      //   throw new Error ("Error during signIn, no username")
+      // }
+
+      if (isNewUser && profile?.login) {
+        await createAndSetNewUser(profile?.login);
+      }
+      // Temporary get userId
       // TODO: when resource is available send properties to backend and get id
-      if (!token?.id) {
+      if (!isNewUser && !token?.id && profile?.login) {
         await axios
-          .get("/users/4")
-          .then((res) => {
+          .get("/users")
+          .then(async (res) => {
             if (res.data) {
-              token.id = res.data.id;
-              token.permissions = res.data.permissions;
+              const _users = res.data;
+              const user = _users.find((user: any) => user.githubUsername === profile?.login)
+              console.log("found user", user, _users)
+              if (user) {
+                token.user = user;
+              } else {
+                await createAndSetNewUser(profile?.login);
+              }
             }
           })
           .catch(() => (token.id = undefined));
