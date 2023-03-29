@@ -79,7 +79,7 @@ export default function Home() {
           name: "",
           type: "action",
           modifier: (data) => data.id,
-          action: (data: Transcript, idx: number) => handleClaim(data.id, idx),
+          action: (data: Transcript, idx: number) => handleClaim(idx, data.id),
         },
       ] as TableStructure[],
     [handleClaim]
