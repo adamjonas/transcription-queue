@@ -1,5 +1,5 @@
 import { dateFormatGeneral, getTimeLeftText } from "@/utils";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { useState } from "react";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
@@ -71,19 +71,10 @@ const SidebarContentEdit = ({
           <Text fontWeight={600} mb={2}>
             Original Media
           </Text>
-          <Link href={data.originalContent?.media || ""}>
-            <Box
-              display="inline-block"
-              bgColor="red.600"
-              p={2}
-              fontSize="12px"
-              borderRadius="md"
-              color="white"
-              fontWeight={700}
-              width="auto"
-            >
-              Youtube
-            </Box>
+          <Link href={data.originalContent?.media || ""} target="_blank">
+            <Button colorScheme="orange" size="sm">
+              Source
+            </Button>
           </Link>
         </Box>
         <Box>
