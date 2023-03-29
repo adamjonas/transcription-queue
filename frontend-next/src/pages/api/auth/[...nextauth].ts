@@ -53,7 +53,6 @@ export const authOptions: NextAuthOptions = {
         ...token.user,
         ...defaultSessionUser,
       };
-      session.permissions = token.permissions;
       return session;
     },
     async jwt({ isNewUser, token, ...response }) {
@@ -61,7 +60,7 @@ export const authOptions: NextAuthOptions = {
 
       const createAndSetNewUser = async (username: string, permissions?: string) => {
         const res = await createNewUser({ username, permissions });
-        console.log("create and set", res.data)
+        console.log("create and set", res.data);
         if (res.data) {
           token.user = res.data;
         } else {
