@@ -44,16 +44,17 @@ const EditTranscript = ({
       display="flex"
       flexDir="column"
     >
-      <Flex alignItems="center" justifyContent="space-between" my={2}>
-        <Text>Transcription Text</Text>
+      <Box my={2}>
         <Button
           colorScheme="red"
           onClick={() => update(data.originalContent?.body || "")}
           size="xs"
+          ml="auto"
+          display="block"
         >
           Restore Original
         </Button>
-      </Flex>
+      </Box>
       <Box h="full" id="simplemde-container-controller">
         <MdEditor modelValue={mdData} onChange={update} language="en-US" />
       </Box>
