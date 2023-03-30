@@ -1,8 +1,8 @@
-const authConfig = require("../config/auth.config.js");
 const db = require("../models");
 const Transcript = db.transcripts;
 const Op = db.Sequelize.Op;
 const crypto = require('crypto');
+require('dotenv').config();
 
 // Create and Save a new Transcript
 exports.create = (req, res) => {
@@ -32,18 +32,17 @@ exports.create = (req, res) => {
 
   const verifyToken = (token) => {
 
-    return token === authConfig.TOKEN;
+    return token === process.env.TOKEN;
   }
 
   const generateHash = () => {
 
-    const oc = req.body.originalContent
-    const hashParams = oc.title + oc.media + oc.date
+    const oc = req.body.originalContent;
+    const hashParams = oc.media; 
     const transcriptHash = crypto.createHash('sha256').update(hashParams).digest('base64');
 
     return transcriptHash;
   }
-
 
   if (!verifyToken(req.body.authToken)) {
     res.status(400).send({
@@ -54,7 +53,7 @@ exports.create = (req, res) => {
   // Create a Transcript
   const transcript = {
     originalContent: req.body.originalContent,
-    content:req.body.originalContent,
+    content:req.body.content,
     transcriptHash: generateHash()
   };
 
