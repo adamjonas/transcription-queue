@@ -1,12 +1,15 @@
 import { dateFormatGeneral, getTimeLeftText } from "@/utils";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import { useState } from "react";
+import { forwardRef, LegacyRef, useState } from "react";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { Transcript } from "../../../types";
 import CustomDatePicker from "./CustomDatePicker";
 import SelectField from "./SelectField";
 import TextField from "./TextField";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import styles from "./sidebarContentEdit.module.css";
 
 export type RenderProps = {
   // eslint-disable-next-line no-unused-vars
@@ -14,7 +17,7 @@ export type RenderProps = {
     editedTitle: string;
     editedSpeakers: string[];
     editedCategories: string[];
-    editedDate: string;
+    editedDate: Date | null;
   }): React.ReactNode;
 };
 
@@ -30,7 +33,7 @@ const SidebarContentEdit = ({
   const [editedCategories, setEditedCategories] = useState<string[]>([]);
 
   const dateStringFormat = dateFormatGeneral(data?.createdAt, true) as string;
-  const [editedDate, setEditedDate] = useState<string>(dateStringFormat || "");
+  const [editedDate, setEditedDate] = useState<Date | null>(new Date(data?.createdAt ?? ""));
 
   const updateTitle = (newTitle: string) => {
     setEditedTitle(newTitle);
@@ -41,6 +44,7 @@ const SidebarContentEdit = ({
   const updateCategories = (categories: string[]) => {
     setEditedCategories(categories);
   };
+
   return (
     <Box
       w="full"
@@ -106,7 +110,13 @@ const SidebarContentEdit = ({
             YYYY-MM-DD format
           </Text>
 
-          <CustomDatePicker date={editedDate} onChange={setEditedDate} />
+          {/* <CustomDatePicker date={editedDate} onChange={setEditedDate} /> */}
+          <DatePicker
+            selected={editedDate}
+            onChange={(date) => setEditedDate(date)}
+            dateFormat="yyyy-MM-dd"
+            className={styles.customDatePicker}
+          />
 
           {/* <Input
             fontSize="12px"

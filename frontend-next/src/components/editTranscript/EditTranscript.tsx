@@ -13,15 +13,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import MdEditor from "md-editor-rt";
+import MdEditor, { ExposeParam } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 
-import "easymde/dist/easymde.min.css";
-import { useEffect, useRef, useState } from "react";
+import sanitize from "sanitize-html";
 
-// const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), {
-//   ssr: false,
-// });
+import { useEffect, useRef, useState } from "react";
 
 const EditTranscript = ({
   data,
@@ -33,8 +30,21 @@ const EditTranscript = ({
   // eslint-disable-next-line no-unused-vars
   update: (x: any) => void;
 }) => {
+
+  const editorRef = useRef<ExposeParam>();
+  const [isPreviewOnly, setIsPreviewOnly] = useState(false);
+  // Ensure editorData is updated
   const hasUpdatedEditorData = useRef<Boolean>(false);
   const [isModalOpen, setIsModalopen] = useState(false);
+
+  // hijack params of mdEditor to change toolbar "preview" function
+  useEffect(() => {
+    editorRef.current?.on("preview", (state) => {
+      setIsPreviewOnly(state);
+    });
+  }, []);
+
+  // delays may prevent editor data from being synced with data, this ensures the sync
   useEffect(() => {
     if (
       data.originalContent?.body &&
@@ -49,6 +59,7 @@ const EditTranscript = ({
     };
   }, [data, mdData, update]);
 
+  // restoreOriginal content function
   const restoreOriginal = () => {
     update(data.originalContent?.body || "");
     setIsModalopen(false);
@@ -75,7 +86,25 @@ const EditTranscript = ({
           </Button>
         </Box>
         <Box h="full" id="simplemde-container-controller">
-          <MdEditor modelValue={mdData} onChange={update} language="en-US" />
+          <MdEditor
+            ref={editorRef}
+            className={isPreviewOnly ? "hide-editor" : ""}
+            sanitize={sanitize}
+            modelValue={mdData}
+            onChange={update}
+            language="en-US"
+            toolbarsExclude={[
+              "image",
+              "table",
+              "mermaid",
+              "htmlPreview",
+              "github",
+              "prettier",
+            ]}
+            preview={false}
+            previewTheme="github"
+            noMermaid
+          />
         </Box>
       </Box>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalopen(false)}>
