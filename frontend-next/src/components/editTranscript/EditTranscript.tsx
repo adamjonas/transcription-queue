@@ -13,7 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import MdEditor, { ExposeParam } from "md-editor-rt";
+import MdEditor, { ExposeParam, ToolbarNames } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
 
 import sanitize from "sanitize-html";
@@ -100,6 +100,10 @@ const EditTranscript = ({
               "htmlPreview",
               "github",
               "prettier",
+              "save",
+              "code",
+              "catalog",
+              "katex",
             ]}
             preview={false}
             previewTheme="github"
@@ -117,7 +121,7 @@ const EditTranscript = ({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>Are you sure? any changes made will be lost.</Text>
+            <Text>Are you sure? All changes will be lost.</Text>
           </ModalBody>
           <ModalFooter>
             <Button
