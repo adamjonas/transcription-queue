@@ -1,10 +1,9 @@
-import { dateFormatGeneral, getTimeLeftText } from "@/utils";
+import { getTimeLeftText } from "@/utils";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import { forwardRef, LegacyRef, useState } from "react";
+import { useState } from "react";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { Transcript } from "../../../types";
-import CustomDatePicker from "./CustomDatePicker";
 import SelectField from "./SelectField";
 import TextField from "./TextField";
 import DatePicker from "react-datepicker";
@@ -32,8 +31,10 @@ const SidebarContentEdit = ({
   const [editedSpeakers, setEditedSpeakers] = useState<string[]>([]);
   const [editedCategories, setEditedCategories] = useState<string[]>([]);
 
-  const dateStringFormat = dateFormatGeneral(data?.createdAt, true) as string;
-  const [editedDate, setEditedDate] = useState<Date | null>(new Date(data?.createdAt ?? ""));
+  // const dateStringFormat = dateFormatGeneral(data?.createdAt, true) as string;
+  const [editedDate, setEditedDate] = useState<Date | null>(
+    new Date(data?.createdAt ?? "")
+  );
 
   const updateTitle = (newTitle: string) => {
     setEditedTitle(newTitle);
