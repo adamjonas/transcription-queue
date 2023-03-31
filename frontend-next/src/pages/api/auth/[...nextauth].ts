@@ -1,7 +1,11 @@
 import axios from "@/api/axios";
 import { createNewUser } from "@/api/lib";
-import NextAuth, { GhExtendedProfile, NextAuthOptions, Session } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import NextAuth, {
+  GhExtendedProfile,
+  NextAuthOptions,
+  Session,
+} from "next-auth";
+// import { JWT } from "next-auth/jwt";
 import GithubProvider from "next-auth/providers/github";
 
 export const authOptions: NextAuthOptions = {
@@ -35,41 +39,40 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ isNewUser, token, ...response }) {
       const profile = response.profile as GhExtendedProfile | undefined;
-      console.log({token, profile})
 
-      const createAndSetNewUser = async (username: string, permissions?: string) => {
+      const createAndSetNewUser = async (
+        username: string,
+        permissions?: string
+      ) => {
         const res = await createNewUser({ username, permissions });
-        console.log("create and set", res.data);
         if (res.data) {
           token.user = res.data;
         } else {
           throw new Error("Unable to create user");
         }
-      }
+      };
 
       // if (!profile?.login) {
       //   throw new Error ("Error during signIn, no username")
       // }
 
       if (isNewUser && profile?.login) {
-        console.log("new user")
         await createAndSetNewUser(profile?.login);
       }
       // Temporary get userId
       // TODO: when resource is available send properties to backend and get id
       if (!isNewUser && !token?.id && profile?.login) {
-        console.log("returning")
         await axios
           .get("/users")
           .then(async (res) => {
             if (res.data) {
               const _users = res.data;
-              const user = _users.find((user: any) => user.githubUsername === profile?.login)
-              console.log("found user", user, _users)
+              const user = _users.find(
+                (user: any) => user.githubUsername === profile?.login
+              );
               if (user) {
                 token.user = user;
               } else {
-                console.log("returning but not in db")
                 await createAndSetNewUser(profile?.login);
               }
             }
