@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ isNewUser, token, ...response }) {
       const profile = response.profile as GhExtendedProfile | undefined;
+      console.log({token, profile})
 
       const createAndSetNewUser = async (username: string, permissions?: string) => {
         const res = await createNewUser({ username, permissions });
@@ -73,11 +74,13 @@ export const authOptions: NextAuthOptions = {
       // }
 
       if (isNewUser && profile?.login) {
+        console.log("new user")
         await createAndSetNewUser(profile?.login);
       }
       // Temporary get userId
       // TODO: when resource is available send properties to backend and get id
       if (!isNewUser && !token?.id && profile?.login) {
+        console.log("returning")
         await axios
           .get("/users")
           .then(async (res) => {
@@ -88,6 +91,7 @@ export const authOptions: NextAuthOptions = {
               if (user) {
                 token.user = user;
               } else {
+                console.log("returning but not in db")
                 await createAndSetNewUser(profile?.login);
               }
             }
