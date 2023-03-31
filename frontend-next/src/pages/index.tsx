@@ -10,17 +10,35 @@ export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { transcripts, claimTranscript } = useTranscripts();
-  const { data, isLoading, isRefetching, isError, refetch } = transcripts;
+  const { data, isLoading, isError, refetch } = transcripts;
 
   const retriedClaim = useRef(0);
+  const auth_url = useRef(process.env.NEXT_PUBLIC_AUTH_URL);
 
   const [claimState, setClaimState] = useState({
     claim: claimTranscript,
     rowIndex: -1,
   });
 
+  useEffect(() => {
+    if (!auth_url.current) {
+      auth_url.current = process.env.NEXT_PUBLIC_AUTH_URL;
+    }
+  }, []);
+
+  const retryLoginAndClaim = async (idx: number, transcriptId: number) => {
+    await signOut({ redirect: false });
+    if (retriedClaim.current < 2) {
+      retriedClaim.current += 1;
+      await signIn("github", {
+        callbackUrl: `${auth_url.current}?reclaim=true&idx=${idx}&txId=${transcriptId}`,
+      });
+    }
+    return;
+  };
+
   const handleClaim = useCallback(
-    (idx: number, transcriptId: number) => {
+    async (idx: number, transcriptId: number) => {
       if (status === "loading") {
         alert("Authenticating.... please wait.");
         return;
@@ -33,20 +51,14 @@ export default function Home() {
         claimTranscript.mutate(
           { userId: session.user.id, transcriptId },
           {
-            onSuccess: (data) => {
+            onSuccess: async (data) => {
               setClaimState((prev) => ({ ...prev, rowIndex: -1 }));
-              console.log("data from post", { data });
               if (data instanceof Error) {
-                signOut({ redirect: false });
-                if (retriedClaim.current < 2) {
-                  retriedClaim.current += 1;
-                  console.log("retry claim", {idx, transcriptId})
-                  signIn("github", { callbackUrl: `${process.env.NEXTAUTH_URL}?reclaim=true&idx=${idx}&txId=${transcriptId}`  });
-                }
-                return;
+                await retryLoginAndClaim(idx, transcriptId);
               }
               router.push(`/transcripts/${transcriptId}`);
             },
+
             onError: (err) => {
               setClaimState((prev) => ({ ...prev, rowIndex: -1 }));
               alert("failed to claim: " + err);
@@ -54,15 +66,8 @@ export default function Home() {
           }
         );
       } else {
-        signOut({ redirect: false });
-        if (retriedClaim.current < 2) {
-          retriedClaim.current += 1;
-          console.log("retry claim", {idx, transcriptId})
-          // signIn("github", { callbackUrl: (process.env.NEXT_PUBLIC_AUTH_URL ?? process.env.NEXTAUTH_URL)+`?reclaim=true&idx=${idx}&txId=${transcriptId}`  });
-          signIn("github", { callbackUrl: `http://localhost:3000?reclaim=true&idx=${idx}&txId=${transcriptId}`  });
-        }
+        await retryLoginAndClaim(idx, transcriptId);
       }
-      console.log({ session, idx, transcriptId });
     },
     [session, status, claimTranscript, router]
   );
@@ -70,11 +75,18 @@ export default function Home() {
   // Reclaim transcript when there's a reclaimquery
   useEffect(() => {
     const { reclaim, idx, txId } = router.query;
-    if (reclaim && idx && txId && data && retriedClaim.current < 2) {
+    if (
+      reclaim &&
+      idx &&
+      txId &&
+      data &&
+      status === "authenticated" &&
+      retriedClaim.current < 2
+    ) {
       retriedClaim.current = 2;
       handleClaim(Number(idx), Number(txId));
     }
-  }, [data, router, handleClaim]);
+  }, [data, router, handleClaim, status]);
 
   const tableStructure = useMemo(
     () =>

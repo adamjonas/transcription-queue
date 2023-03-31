@@ -18,28 +18,6 @@ export const authOptions: NextAuthOptions = {
     // ...add more providers here
   ],
   callbacks: {
-    // async signIn({ user, account, profile }) {
-    //   const res = await fetch("/api/auth/github", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       access_token: account?.accessToken,
-    //       user: {
-    //         name: user.name,
-    //         email: user.email,
-    //         image: user.image,
-    //       },
-    //     }),
-    //   });
-    //   const data = await res.json();
-    //   if (data.error) {
-    //     throw new Error(data.error);
-    //   }
-    //   return true;
-    // },
-
     async session({
       session,
       token,
