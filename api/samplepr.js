@@ -1,4 +1,5 @@
-const { spawnSync } = require('child_process');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const datum = require('./testdatajson');
 const fs = require('fs');
 const path = require('path');
@@ -91,23 +92,23 @@ function writeToFile(result, url, title, date, tags, category, speakers, videoTi
   }
 }
 
-function createPR(absolutePath, loc, username, currTime, title) {
-  const branchName = loc.replace('/', '-');
-  const initializeResult = spawnSync('bash', ['initializeRepo.sh', absolutePath, loc, branchName, username, currTime]);
-  if (initializeResult.status !== 0) {
-    console.error(`Error occurred while running initializeRepo.sh. Output: ${initializeResult.stderr.toString()}`);
-    return;
-  }
 
-  const githubResult = spawnSync('bash', ['github.sh', branchName, username, currTime, title]);
-  if (githubResult.status !== 0) {
-    console.error(`Error occurred while creating pull request. Output: ${githubResult.stderr.toString()}`);
-    return;
-  }
+async function createPR(absolute_path, loc, username, curr_time, title) {
+  const branch_name = loc.replace("/", "-");
+  try {
+    const { stdout, stderr } = await exec(`bash initializeRepo.sh ${absolute_path} ${loc} ${branch_name} ${username} ${curr_time}`);
+    console.log('stdout:', stdout);
+    console.error('stderr:', stderr);
 
-  console.log('Pull request created successfully.');
+    const { stdout: stdout2, stderr: stderr2 } = await exec(`bash github.sh ${branch_name} ${username} ${curr_time} ${title}`);
+    console.log('stdout:', stdout2);
+    console.error('stderr:', stderr2);
+
+    console.log("Please check the PR for the transcription.");
+  } catch (err) {
+    console.error(err);
+  }
 }
-
 const absolutePath = writeToFile(result, url, title, date, tags, category, speakers,username,pr);
 console.log(absolutePath);
 
