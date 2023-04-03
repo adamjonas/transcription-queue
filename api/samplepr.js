@@ -12,7 +12,7 @@ const date = datum.date;
 const tags = datum.tags;
 const category = datum.categories;
 const speakers = datum.speakers;
-const username = "nassersaazi";
+const username = "xyz";//"github-username"; <-- uncomment this and replace with your authenticated username to test. this will later be replace with the reviewer's github username
 const pr = true;
 
 
@@ -112,7 +112,7 @@ async function createPR(absolute_path, loc, username, curr_time, title) {
 const absolutePath = writeToFile(result, url, title, date, tags, category, speakers,username,pr);
 console.log(absolutePath);
 
-const loc = 'btctranscripts/testfolder';
+const loc = 'transcription-queue/testfolder';
 const currTime = Math.round(Date.now());
 
 createPR(absolutePath, loc, username, currTime, title);

@@ -7,17 +7,17 @@ else
   gh auth login
 fi
  #check if the repo exists
-if [ -d "./moviedb-app/" ]; then
+if [ -d "./bitcointranscripts/" ]; then
   # set the repo to the current directory
   git pull upstream master
-  cd moviedb-app || exit
+  cd bitcointranscripts || exit
 else
   # fork and clone the repo
-  gh repo fork Emmanuel-Develops/moviedb-app --clone
-  gh repo set-default "${4}"/moviedb-app
+  gh repo fork bitcointranscripts/bitcointranscripts --clone
+  gh repo set-default "${4}"/bitcointranscripts
 
   # set the repo to the current directory
-  cd moviedb-app || exit
+  cd bitcointranscripts || exit
 fi
 # check if the current branch is master else checkout master
 git_branch="$(git rev-parse --abbrev-ref HEAD)"
