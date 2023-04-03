@@ -33,8 +33,8 @@ export default function Home() {
       await signIn("github", {
         callbackUrl: `${auth_url.current}?reclaim=true&idx=${idx}&txId=${transcriptId}`,
       });
+      console.log("I got here")
     }
-    return;
   };
 
   const handleClaim = useCallback(
@@ -55,6 +55,7 @@ export default function Home() {
               setClaimState((prev) => ({ ...prev, rowIndex: -1 }));
               if (data instanceof Error) {
                 await retryLoginAndClaim(idx, transcriptId);
+                return;
               }
               router.push(`/transcripts/${transcriptId}`);
             },
