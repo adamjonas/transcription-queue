@@ -6,5 +6,4 @@ package-lock.json
 frontend/.env
 tags
 todos.*
-*.md
 *.txt
