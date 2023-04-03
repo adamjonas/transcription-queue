@@ -52,10 +52,6 @@ export const authOptions: NextAuthOptions = {
         }
       };
 
-      // if (!profile?.login) {
-      //   throw new Error ("Error during signIn, no username")
-      // }
-
       if (isNewUser && profile?.login) {
         await createAndSetNewUser(profile?.login);
       }
