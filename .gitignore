@@ -8,3 +8,6 @@ tags
 todos.*
 *.md
 *.txt
+
+# Local history
+.history
