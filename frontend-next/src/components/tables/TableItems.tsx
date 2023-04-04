@@ -65,19 +65,20 @@ export const Tags = ({ tableItem, row }: TableDataElement) => {
   }
 
   const _zeroItem = typeof _parsed === "string" ? "N/A" : _parsed[0];
+  const others = _parsed.slice(1);
   return (
     <Td>
       <Flex alignItems="center" justifyContent="space-between" gap={2}>
         <Text textTransform="capitalize">{_zeroItem}</Text>
-        {Array.isArray(_parsed) && _parsed.length > 1 ? (
+        {Array.isArray(others) && others.length > 0 ? (
           <TablePopover
             trigger={
-              <button className={styles.more_button}>+{_parsed.length}</button>
+              <button className={styles.more_button}>+{others.length}</button>
             }
             title={tableItem.name}
           >
             <Flex flexDir="column">
-              {_parsed.map((item, idx) => (
+              {others.map((item, idx) => (
                 <Text textTransform="capitalize" fontSize="12px" key={idx}>
                   {item}
                 </Text>
