@@ -50,7 +50,7 @@ const QueueTable: React.FC<Props> = ({ data, isLoading, refetch }) => {
   return (
     <Box fontSize="sm" py={4} isolation="isolate">
       <Heading size="md" mb={6}>
-        Transcription Queue
+        Transcripts waiting for review...
       </Heading>
       {refetch && <RefetchButton refetch={refetch} />}
       <Table
