@@ -1,5 +1,5 @@
 import useTranscripts from "@/hooks/useTranscripts";
-import QueueTable from "@/components/queueTable/QueueTable";
+import QueueTable from "@/components/tables/QueueTable";
 
 export default function Home() {
   const { data, isLoading, isRefetching, isError, refetch } =
@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <QueueTable
-        data={data}
+        data={data ?? []}
         isLoading={isLoading || isRefetching}
         isError={isError}
         refetch={refetch}

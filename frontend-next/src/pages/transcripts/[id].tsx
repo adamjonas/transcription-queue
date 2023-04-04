@@ -1,17 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { Button, Flex } from "@chakra-ui/react";
-import { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
-import { Transcript } from "../../../types";
+import { useState } from "react";
 import SidebarContentEdit from "@/components/sideBarContentEdit/SidebarContentEdit";
 import EditTranscript from "@/components/editTranscript/EditTranscript";
 import useTranscripts from "@/hooks/useTranscripts";
 import { useRouter } from "next/router";
-
-type Props = {
-  data: Transcript;
-};
 
 const TranscriptPage = () => {
   const { status } = useSession();
@@ -52,32 +46,36 @@ const TranscriptPage = () => {
         <p> Loading...</p>
       ) : (
         <Flex gap={6} w="full" flexDir={{ base: "column", md: "row" }}>
-          <SidebarContentEdit data={data}>
-            {(editedContent) => (
-              <Flex gap={2}>
-                <Button
-                  size="sm"
-                  colorScheme="orange"
-                  variant="outline"
-                  onClick={() => handleSave(editedContent)}
-                >
-                  Save
-                </Button>
-                <Button
-                  size="sm"
-                  colorScheme="orange"
-                  onClick={() => handleSubmit(editedContent)}
-                >
-                  Submit
-                </Button>
-              </Flex>
-            )}
-          </SidebarContentEdit>
-          <EditTranscript
-            data={data}
-            mdData={editedData}
-            update={setEditedData}
-          />
+          {data && (
+            <SidebarContentEdit data={data}>
+              {(editedContent) => (
+                <Flex gap={2}>
+                  <Button
+                    size="sm"
+                    colorScheme="orange"
+                    variant="outline"
+                    onClick={() => handleSave(editedContent)}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    colorScheme="orange"
+                    onClick={() => handleSubmit(editedContent)}
+                  >
+                    Submit
+                  </Button>
+                </Flex>
+              )}
+            </SidebarContentEdit>
+          )}
+          {data && (
+            <EditTranscript
+              data={data}
+              mdData={editedData}
+              update={setEditedData}
+            />
+          )}
         </Flex>
       )}
     </>
