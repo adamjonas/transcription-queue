@@ -1,15 +1,18 @@
 import endpoints from "@/api/endpoints";
 import { useQuery } from "react-query";
 import axios from "../api/axios";
+import { Transcript } from "../../types";
 
 const useTranscripts = () => {
-  const getAllTranscripts = async (): Promise<any> => {
+  const getAllTranscripts = async (): Promise<Transcript[]> => {
     return axios
       .get(endpoints.GET_TRANSCRIPTS())
       .then((res) => res.data)
       .catch((err) => err);
   };
-  const getSingleTranscripts = async (transcriptId: number): Promise<any> => {
+  const getSingleTranscripts = async (
+    transcriptId: number
+  ): Promise<Transcript> => {
     return axios
       .get(endpoints.GET_TRANSCRIPTS_BY_ID(transcriptId || 0))
       .then((res) => res.data)
@@ -22,7 +25,7 @@ const useTranscripts = () => {
 
   const SingleTranscript = (transcriptId: number) =>
     useQuery(
-      `transcript_${transcriptId}`,
+      ["transcript", transcriptId],
       () => getSingleTranscripts(transcriptId),
       {
         refetchOnWindowFocus: false,

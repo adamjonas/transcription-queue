@@ -5,7 +5,6 @@ import {
   Popover,
   PopoverBody,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
   Text,
   Icon,
@@ -15,9 +14,13 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
 import GlobalContainer from "../GlobalContainer";
+import { useState } from "react";
 
 const Navbar = () => {
   const { data: userSession } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleClose = () => setIsOpen(false);
+  const handleTogglePopOver = () => setIsOpen((value) => !value);
   // useEffect(() => {
   //   console.log({userSession})
   // }, [userSession])
@@ -53,13 +56,23 @@ const Navbar = () => {
           ) : (
             <Flex>
               {userSession.user?.image && (
-                <Popover placement="bottom-end">
+                <Popover
+                  isOpen={isOpen}
+                  onClose={handleClose}
+                  placement="bottom-end"
+                >
                   <PopoverTrigger>
                     <Flex alignItems="center" gap={2}>
                       <Text fontSize="12px" fontWeight="semibold">
                         My Account
                       </Text>
-                      <Button variant="unstyled" h="auto" w="auto" minW="auto">
+                      <Button
+                        onClick={handleTogglePopOver}
+                        variant="unstyled"
+                        h="auto"
+                        w="auto"
+                        minW="auto"
+                      >
                         <Box
                           p={1}
                           border="2px solid"
@@ -78,20 +91,18 @@ const Navbar = () => {
                     </Flex>
                   </PopoverTrigger>
                   <PopoverContent w="auto" minW="200px">
-                    <PopoverHeader fontWeight="semibold">
-                      SignedIn as
-                    </PopoverHeader>
                     <PopoverBody>
-                      <Text>{userSession.user?.name}</Text>
-                      <Button
-                        mt={2}
-                        ml="auto"
-                        size="xs"
-                        colorScheme="red"
-                        onClick={() => signOut()}
+                      <Link
+                        onClick={handleClose}
+                        href={`/${userSession.user?.name}`}
                       >
-                        Sign Out
-                      </Button>
+                        <Text>{userSession.user?.name}</Text>
+                      </Link>
+                      <Box color={"red"} mt={2} ml="auto">
+                        <button type="button" onClick={() => signOut()}>
+                          Sign out
+                        </button>
+                      </Box>
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>

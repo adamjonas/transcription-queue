@@ -1,4 +1,4 @@
-import { hoursToMilliseconds, millisecondsToHours } from "date-fns";
+import { format, hoursToMilliseconds, millisecondsToHours } from "date-fns";
 import config from "./config/config.json";
 
 const claim_duration_in_ms = hoursToMilliseconds(
@@ -6,14 +6,8 @@ const claim_duration_in_ms = hoursToMilliseconds(
 );
 
 export const dateFormat = (date: Date) => {
-  const options = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    timeZone: "UTC",
-  } as const;
   const _date = new Date(date);
-  return new Intl.DateTimeFormat(undefined, options).format(_date);
+  return format(_date, "yyyy/MM/dd");
 };
 
 export const dateFormatGeneral = (date: Date | null, stringFormat: boolean) => {
