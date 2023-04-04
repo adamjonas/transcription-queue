@@ -16,7 +16,7 @@ import { useMemo } from "react";
 import { TbReload } from "react-icons/tb";
 import type { Transcript } from "../../../types";
 import TablePopover from "../TablePopover";
-import styles from "./queueTable.module.scss";
+import styles from "./tableItems.module.scss";
 import type { TableDataElement, TableStructure } from "./types";
 
 const defaultUndefined = <TData, TCb extends (data: TData) => any>(
@@ -96,7 +96,7 @@ export const TableAction = ({ tableItem, row }: TableDataElement) => {
     <Td>
       <Link href={`/transcripts/${linkId}`}>
         <Button colorScheme="orange" size="sm">
-          Review
+          Claim
         </Button>
       </Link>
     </Td>
