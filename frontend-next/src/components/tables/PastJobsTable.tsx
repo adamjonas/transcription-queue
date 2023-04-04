@@ -2,7 +2,7 @@
 import { getCount } from "@/utils";
 import { Box, Heading, Table, Tbody, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
-import { Transcript } from "../../../types";
+import type { Transcript } from "../../../types";
 import {
   DataEmpty,
   LoadingSkeleton,
@@ -10,7 +10,7 @@ import {
   RowData,
   TableHeader,
 } from "./TableItems";
-import { TableStructure } from "./types";
+import type { TableStructure } from "./types";
 
 type Props = {
   data: Transcript[];
