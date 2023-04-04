@@ -5,7 +5,6 @@ import {
   Popover,
   PopoverBody,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
   Text,
   Icon,
@@ -92,9 +91,6 @@ const Navbar = () => {
                     </Flex>
                   </PopoverTrigger>
                   <PopoverContent w="auto" minW="200px">
-                    <PopoverHeader fontWeight="semibold">
-                      Signed In as
-                    </PopoverHeader>
                     <PopoverBody>
                       <Link
                         onClick={handleClose}
@@ -102,15 +98,11 @@ const Navbar = () => {
                       >
                         <Text>{userSession.user?.name}</Text>
                       </Link>
-                      <Button
-                        mt={2}
-                        ml="auto"
-                        size="xs"
-                        colorScheme="red"
-                        onClick={() => signOut()}
-                      >
-                        Sign Out
-                      </Button>
+                      <Box color={"red"} mt={2} ml="auto">
+                        <button type="button" onClick={() => signOut()}>
+                          Sign out
+                        </button>
+                      </Box>
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
