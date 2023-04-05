@@ -1,7 +1,6 @@
 const db = require("../models");
 const Transcript = db.transcripts;
 const Op = db.Sequelize.Op;
-const crypto = require('crypto');
 
 // Create and Save a new Transcript
 exports.create = (req, res) => {
@@ -20,11 +19,16 @@ exports.create = (req, res) => {
     return;
   }
 
-  const generateHash = () => {
+  const getFirstFiveWords = (paragraph) => {
+    const words = paragraph.trim().split(/\s+/);
+    return words.slice(0, 5).join(' ');
+  };
+
+  const generateUniqueStr = () => {
 
     const oc = req.body.originalContent;
-    const hashParams = oc.media; 
-    const transcriptHash = crypto.createHash('sha256').update(hashParams).digest('base64');
+    const str = oc.title + getFirstFiveWords(oc.body); 
+    const transcriptHash = str.trim().toLowerCase();
 
     return transcriptHash;
   }
@@ -33,7 +37,7 @@ exports.create = (req, res) => {
   const transcript = {
     originalContent: req.body.originalContent,
     content:req.body.content,
-    transcriptHash: generateHash()
+    transcriptHash: generateUniqueStr()
   };
 
   // Save Transcript in the database
