@@ -2,7 +2,6 @@ const db = require("../models");
 const Transcript = db.transcripts;
 const Op = db.Sequelize.Op;
 const crypto = require('crypto');
-require('dotenv').config();
 
 // Create and Save a new Transcript
 exports.create = (req, res) => {
@@ -21,20 +20,6 @@ exports.create = (req, res) => {
     return;
   }
 
-  // add authentication token to prevent dos attacks
-  else if (!req.body.authToken) {
-    res.status(400).send({
-      message: "Auth token cannot be empty!"
-    });
-    return;
-  }
-
-
-  const verifyToken = (token) => {
-
-    return token === process.env.TOKEN;
-  }
-
   const generateHash = () => {
 
     const oc = req.body.originalContent;
@@ -44,12 +29,6 @@ exports.create = (req, res) => {
     return transcriptHash;
   }
 
-  if (!verifyToken(req.body.authToken)) {
-    res.status(400).send({
-      message: "Auth token is invalid"
-    });
-    return;
-  }
   // Create a Transcript
   const transcript = {
     originalContent: req.body.originalContent,
