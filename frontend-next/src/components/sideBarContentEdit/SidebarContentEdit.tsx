@@ -98,7 +98,7 @@ const SidebarContentEdit = ({
           </Text>
           <SelectField
             name="speakers"
-            data={data.originalContent.speakers ?? []}
+            data={data.originalContent?.speakers ?? []}
             editedData={editedSpeakers}
             updateData={updateSpeaker}
           />
@@ -132,7 +132,7 @@ const SidebarContentEdit = ({
           </Text>
           <SelectField
             name="categories"
-            data={data.originalContent.categories ?? []}
+            data={data?.originalContent?.categories ?? []}
             editedData={editedCategories}
             updateData={updateCategories}
           />

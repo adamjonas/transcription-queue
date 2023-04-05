@@ -24,8 +24,10 @@ import {
   QueryObserverResult,
   RefetchOptions,
   RefetchQueryFilters,
+  UseMutationResult,
 } from "react-query";
 import Link from "next/link";
+import { AxiosResponse } from "axios";
 
 type Props = {
   data: Transcript[];
@@ -34,6 +36,20 @@ type Props = {
   refetch?: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<any, unknown>>;
+  handleAction?: (idx: number, row: any) => void;
+  claimState: {
+    claim: UseMutationResult<
+      AxiosResponse<any, any> | Error,
+      unknown,
+      {
+        userId: number;
+        transcriptId: number;
+      },
+      unknown
+    >;
+    rowIndex: number;
+  };
+  tableStructure: TableStructure[];
 };
 
 type tableStructureItemType =
@@ -44,45 +60,28 @@ type tableStructureItemType =
   | "action";
 // type TranscriptModifier = (data: Transcript) => any;
 
-type TableStructure = {
+export type TableStructure = {
   name: string;
   type: tableStructureItemType;
   modifier: (data: Transcript) => any;
+  action?: (data: Transcript, idx: number) => void;
 };
 
 type TableDataElement = {
   tableItem: TableStructure;
   row: Transcript;
+  idx?: number;
 };
 
-const tableStructure: TableStructure[] = [
-  { name: "date", type: "date", modifier: (data) => data?.createdAt },
-  {
-    name: "title",
-    type: "text-long",
-    modifier: (data) => data.originalContent.title,
-  },
-  {
-    name: "speakers",
-    type: "tags",
-    modifier: (data) => data.originalContent.speakers,
-  },
-  {
-    name: "category",
-    type: "tags",
-    modifier: (data) => data.originalContent.categories,
-  },
-  { name: "tags", type: "tags", modifier: (data) => data.originalContent.tags },
-  {
-    name: "word count",
-    type: "text-short",
-    modifier: (data) => `${getCount(data.originalContent.body) ?? "-"} words`,
-  },
-  // { name: "bounty rate", type: "text-short", modifier: (data) => "N/A" },
-  { name: "", type: "action", modifier: (data) => data.id },
-];
-
-const QueueTable: React.FC<Props> = ({ data, isLoading, isError, refetch }) => {
+const QueueTable: React.FC<Props> = ({
+  data,
+  isLoading,
+  isError,
+  refetch,
+  handleAction,
+  claimState,
+  tableStructure,
+}) => {
   // if (!data?.length) {
   //   return null;
   // }
@@ -146,7 +145,9 @@ const QueueTable: React.FC<Props> = ({ data, isLoading, isError, refetch }) => {
               <TableRow
                 key={`data-row-${dataRow.id}`}
                 row={dataRow}
+                rowIndex={idx}
                 ts={tableStructure}
+                claimState={claimState}
               />
             ))
           ) : (
@@ -193,7 +194,17 @@ const TableHeader = ({
   );
 };
 
-const TableRow = ({ row, ts }: { row: Transcript; ts: TableStructure[] }) => {
+const TableRow = ({
+  row,
+  ts,
+  claimState,
+  rowIndex,
+}: {
+  row: Transcript;
+  ts: TableStructure[];
+  claimState: Props["claimState"];
+  rowIndex: number;
+}) => {
   const DateText = ({ tableItem, row }: TableDataElement) => {
     const dateString = dateFormat(tableItem.modifier(row)) ?? "N/A";
     return <Td>{dateString}</Td>;
@@ -264,14 +275,23 @@ const TableRow = ({ row, ts }: { row: Transcript; ts: TableStructure[] }) => {
   };
 
   const TableAction = ({ tableItem, row }: TableDataElement) => {
-    const linkId = tableItem.modifier(row);
+    // const linkId = row.id;
+    const handleClick = () => {
+      if (!tableItem.action) return;
+      tableItem.action(row, rowIndex);
+    };
+
+    const isLoading = rowIndex === claimState.rowIndex;
     return (
       <Td>
-        <Link href={`/transcripts/${linkId}`}>
-          <Button colorScheme="orange" size="sm">
-            Claim
-          </Button>
-        </Link>
+        <Button
+          isLoading={isLoading}
+          colorScheme="orange"
+          size="sm"
+          onClick={handleClick}
+        >
+          Claim
+        </Button>
       </Td>
     );
   };
