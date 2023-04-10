@@ -3,17 +3,15 @@ import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GithubProvider from "next-auth/providers/github";
 export const authOptions = {
-  // Configure one or more authentication providers
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
       authorization: {
         url: "https://github.com/login/oauth/authorize",
-        params: { scope: "read:user user:email repo" },
+        params: { scope: "public_repo" },
       },
     }),
-    // ...add more providers here
   ],
   callbacks: {
     async session({
@@ -23,13 +21,16 @@ export const authOptions = {
       session: Session;
       token: any;
     }): Promise<Session> {
-      // Send userId and permission properties to the client
       session.userId = token.id;
       session.permissions = token.permissions;
+      session.accessToken = token.accessToken; // Add the access token to the session
       return session;
     },
-    async jwt({ token }: { token: JWT }) {
-      // TODO: when resource is available send properties to backend and get id
+    async jwt({ token, account }: { token: JWT; account?: any }) {
+      if (account && account.accessToken) {
+        token.accessToken = account.accessToken; // Store the access token in the JWT
+      }
+
       if (!token?.id) {
         await axios
           .get("/users/4")
